@@ -4,15 +4,14 @@
 ### (Original implementation: Official Repo of Tree of Thoughts (ToT))
 [![DOI](https://zenodo.org/badge/642099326.svg)](https://zenodo.org/badge/latestdoi/642099326)
 
-**IMPORTANT Note: https://github.com/kyegomez/tree-of-thoughts is NOT the official implementation to replicate the results in the paper (see https://github.com/ysymyth/tree-of-thought-llm/issues/17).**
-
+Contents below are from the official [princeton-nlp/tree-of-thoughts-llm](https://github.com/princeton-nlp/tree-of-thought-llm)
 ![teaser](teaser.png)
 
 Official implementation for paper [Tree of Thoughts: Deliberate Problem Solving with Large Language Models](https://arxiv.org/abs/2305.10601) with code, prompts, model outputs.
 Also check [its tweet thread](https://twitter.com/ShunyuYao12/status/1659357547474681857) in 1min.
 
 
-Please cite the paper and star this repo if you use ToT and find it interesting/useful. Thanks!
+Citation of the paper: 
 
 ```bibtex
 @misc{yao2023tree,
