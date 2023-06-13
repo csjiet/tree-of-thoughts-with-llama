@@ -1,0 +1,59 @@
+[
+    {
+        "idx": 0,
+        "ys": [
+            "\"\"\"\n\n\nimport pyperclip\n\n\ndef main():\n    infile = 'a.txt'\n    outfile = 'c.txt'\n    with open(infile) as input_file:\n        lines = input_file.read().split",
+            "<script>\n\nfunction openWindow1() {\nvar w = window.open('http://tinysite.com/index.html');\nif (w) {\nw.focus();\n}\n} \n\nfunction closeWindow1() { closeWindow1();",
+            "import re\nfrom django import template as tg\nimport threading\n\nfrom wagtail.wagtailcore.models import Page\nfrom wagtail.wagtailcore.models import RichTextField\n\nfrom wagtail.wagtailadmin.models import PageV",
+            "--\n\nWrite a passage of 4 short paragraphs. Each paragraph has the following elements:\nI remember being a little kid, and getting to play outside on a playground.\nBut when I look at a pile of sharpened pencils, my imagination is spark",
+            "# Explanation\n#\n# Given a set of sentences, determine what the intended meaning for each is.\n# Use natural language rules (i.e. you do not need to consider parts of speech).\n# Separate each sentence into words using punctuation (i",
+            "1. Write a passage of coherent paragraphs. The end sentence of each paragraph ought to be: The thing about her was that she was totally unaware of its impact on people. Whenever I look at a sunset, I want to write a song about it.",
+            "from section 1 - introduction\n(for self)\n\nIt is not easy to do handstand as you standing on your hands. I feel it is difficult to balance when standing on my hands. Sometimes if I am able to balance myself then it is not easy to get up.\nMy",
+            "\"\"\"Sentences to add:\n\nIt isn't difficult to do a handstand if you just stand on your hands.\n\nIt caught him off guard that space smelled of seared steak.\n\nWhen she didn\u2019t like a guy who was trying to",
+            "%-------------------------\n|  4. A LINE IN EVERY PARAGRAPH     |\n%-------------------------\n\nParagraph One should have a line at the beginning   or     the end    or    in the middle. (It is best to do"
+        ],
+        "infos": [
+            {
+                "rs": [],
+                "r": 0
+            },
+            {
+                "rs": [],
+                "r": 0
+            },
+            {
+                "rs": [],
+                "r": 0
+            },
+            {
+                "rs": [],
+                "r": 0
+            },
+            {
+                "rs": [],
+                "r": 0
+            },
+            {
+                "rs": [],
+                "r": 0
+            },
+            {
+                "rs": [],
+                "r": 0
+            },
+            {
+                "rs": [],
+                "r": 0
+            },
+            {
+                "rs": [],
+                "r": 0
+            }
+        ],
+        "usage_so_far": {
+            "completion_tokens": 0,
+            "prompt_tokens": 0,
+            "cost": 0
+        }
+    }
+]
