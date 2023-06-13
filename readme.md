@@ -1,3 +1,5 @@
+> ***Note***: *This is a forked repository from the Official Repo of Tree of Thoughts (ToT) stated below. For experimental purposes, this implementation utilizes LLaMA (Large Language Model Meta AI) which deviates from the original implementation using GPT - OpenAI's API. Please refer the link to the official repo for the original implementation details.*
+
 # Official Repo of Tree of Thoughts (ToT)
 [![DOI](https://zenodo.org/badge/642099326.svg)](https://zenodo.org/badge/latestdoi/642099326)
 
