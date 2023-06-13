@@ -1,4 +1,4 @@
-> ***Note***: *This is a forked repository from the Official Repo of Tree of Thoughts (ToT) stated below. For experimental purposes, this implementation utilizes LLaMA (Large Language Model Meta AI) which deviates from the original implementation using GPT - OpenAI's API. Please refer the link to the official repo for the original implementation details.*
+> ***Note***: *This is a forked repository from the Official Repo of Tree of Thoughts (ToT) cited below. This implementation utilizes LLaMA (Large Language Model Meta AI) for experimental purposes, which deviates from the original implementation using GPT - OpenAI API. Please refer to the link to the official repo for the original implementational details.*
 
 # Official Repo of Tree of Thoughts (ToT)
 [![DOI](https://zenodo.org/badge/642099326.svg)](https://zenodo.org/badge/latestdoi/642099326)
@@ -27,9 +27,6 @@ Please cite the paper and star this repo if you use ToT and find it interesting/
 
 
 ## Setup
-You need to first have an OpenAI API key and store it in the environment variable ``OPENAI_API_KEY`` (see [here](https://help.openai.com/en/articles/5112595-best-practices-for-api-key-safety)). If you use custom base url, set it by environment variable ``OPENAI_API_BASE`` (e.g. https://api.openai.com/v1).
-
-Package requirement: ``pip install openai backoff sympy numpy``
 
 
 ## Experiments
