@@ -1,10 +1,9 @@
 > ***Note***: *This is a forked repository from the Official Repo of Tree of Thoughts (ToT) cited below. This implementation utilizes LLaMA (Large Language Model Meta AI) for experimental purposes, which deviates from the original implementation using GPT - OpenAI API. Please refer to the link to the official repo for the original implementational details.*
 
 # Tree of Thoughts (ToT) with LLaMA
-### (Original implementation: Official Repo of Tree of Thoughts (ToT))
+***Note***: (Please refer to the: Official Repo of Tree of Thoughts (ToT) (linked below) for the original implementation)
 [![DOI](https://zenodo.org/badge/642099326.svg)](https://zenodo.org/badge/latestdoi/642099326)
-
-Contents below are from the official [princeton-nlp/tree-of-thoughts-llm](https://github.com/princeton-nlp/tree-of-thought-llm)
+Contents below are from the official [princeton-nlp/tree-of-thoughts-llm](https://github.com/princeton-nlp/tree-of-thought-llm) repository.
 ![teaser](teaser.png)
 
 Official implementation for paper [Tree of Thoughts: Deliberate Problem Solving with Large Language Models](https://arxiv.org/abs/2305.10601) with code, prompts, model outputs.
