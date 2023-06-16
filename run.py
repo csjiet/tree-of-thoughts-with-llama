@@ -103,7 +103,11 @@ def solve(args, task, idx, to_print=True):
     x = task.get_input(idx)  # input
     ys = ['']  # current output candidates
     infos = []
-    for step in range(task.steps):
+
+    # Breadth of tree in bfs ToT is set using cli: --n_generate_sample
+    # Height of tree in ToT is set using task.steps in their respective tasks/{file}.py files
+
+    for step in range(task.steps): # Set manually in task/{files}.py - e.g., task.steps for game24.py is 4 for 4 operations; text.py is 2.; crossword.py is 10 steps.
         # generation
         if args.method_generate == 'sample':
             new_ys = [get_samples(task, x, y, args.n_generate_sample, prompt_sample=args.prompt_sample, stop=task.stops[step]) for y in ys]
@@ -117,7 +121,10 @@ def solve(args, task, idx, to_print=True):
         elif args.method_evaluate == 'value':
             values = get_values(task, x, new_ys, args.n_evaluate_sample)
 
-        # selection
+        # selection - bfs/ dfs are greedy - essentially, based on the values in evaluation, 
+        # For greedy, we select the top n_select_sample 
+        # For sample, we select n_select_sample based on the probability distribution of the values, 
+        # where we fix the size of output: because 'size' argument is the output shape of random samples of numpy array.
         if args.method_select == 'sample':
             ps = np.array(values) / sum(values)
             select_ids = np.random.choice(ids, size=args.n_select_sample, p=ps).tolist()
@@ -127,9 +134,11 @@ def solve(args, task, idx, to_print=True):
 
         # log
         if to_print: 
+            # Sort the values and new_ys based on the values
             sorted_new_ys, sorted_values = zip(*sorted(zip(new_ys, values), key=lambda x: x[1], reverse=True))
             print(f'-- new_ys --: {sorted_new_ys}\n-- sol values --: {sorted_values}\n-- choices --: {select_new_ys}\n')
-        
+
+        # Append the information of each step to the json file 
         infos.append({'step': step, 'x': x, 'ys': ys, 'new_ys': new_ys, 'values': values, 'select_new_ys': select_new_ys})
         ys = select_new_ys
     
@@ -146,7 +155,8 @@ def naive_solve(args, task, idx, to_print=True):
     return ys, {}
 
 def run(args):
-    task = get_task(args.task, args.task_file_path) # function: parse_args() parses cli by storing each value associated with a flag e.g., --task, --task_file_path, and returns an object which stores value of parsed arguments as attributes, which can be accessed like a field.
+    # Ensures functions invoked using 'task' - an object of a Task class - are from their respective class where they are defined.
+    task = get_task(args.task, args.task_file_path) # returns a task class object (e.g., Game24Task class in tasks/game24.py) returned by get_task() which is imported as a function from __init__.py, which takes in args.task (identifier of task entered in the cli) and returns an instantiated object of a task class e.g., Game24Task class obj in tasks/game24.py
     logs, cnt_avg, cnt_any = [], 0, 0
     # global gpt
     # gpt = partial(gpt, model=args.backend, temperature=args.temperature) # partial function creates a new function which takes in a prompt - gpt - with the model and temperature fixed.
@@ -163,8 +173,7 @@ def run(args):
 
     for i in range(args.task_start_index, args.task_end_index):
 
-        # Run standard prompting, cot, tot
-        # solve
+        # solve: choosing between standard prompting, CoT, ToT
         if args.naive_run: # naive run happens to all standard.* and cot prompts,
             ys, info = naive_solve(args, task, i) 
         else:
@@ -172,7 +181,7 @@ def run(args):
 
         # Appends a dictionary to logs 
         # log 
-        infos = [task.test_output(i, y) for y in ys] # test_output() for each task are defined in ./task/* which returns a dictionary with possible keys 'r', 's' - reward and the solution respectively, etc, that describes the prompt.
+        infos = [task.test_output(i, y) for y in ys] # test_output() for each task are defined in ./task/* 
         
         # info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': gpt_usage(args.backend)}) # update info dictionary with idx, ys, infos, and usage_so_far
 

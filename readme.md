@@ -1,4 +1,4 @@
-> ***Note***: *This is a forked repository from the Official Repo of Tree of Thoughts (ToT) cited below. This implementation utilizes LLaMA (Large Language Model Meta AI) for experimental purposes, which deviates from the original implementation using GPT - OpenAI API. Please refer to the link to the official repo for the original implementational details.*
+> ***Note***: *This is a forked repository from the Official Repo of Tree of Thoughts (ToT) cited below. This implementation utilizes LLaMA (Large Language Model Meta AI) for experimental purposes, which deviates from the original implementation using GPT - OpenAI API. Please refer to the link below for the official repo for its original implementation details.*
 
 # Tree of Thoughts (ToT) with LLaMA
 ***Note***: Please refer to the: Official Repo of Tree of Thoughts (ToT) (linked below) for the original implementation)

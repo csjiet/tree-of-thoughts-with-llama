@@ -39,7 +39,7 @@ class TextTask(Task):
         
         # Replaced with llama
         score_outputs = []
-        for _ in range(5):
+        for _ in range(5): # FIX THIS !
             score_outputs.append(llama(prompt, model = 'llama-7B', max_tokens = 10)[0])
 
         print(score_outputs)
@@ -80,6 +80,18 @@ class TextTask(Task):
             # y = y.replace('Plan:\n', '')
             # TODO: truncate the plan part?
             prompt += f'Choice {i}:\n{y}\n' # concatenate prompt and the choice number and the choice text
+            ''' E.g., Vote prompt + 'Choice i" + new_ys from get_samples, where get_samples are outputs from input (where input is a random line selected from the file: data_100_random_text.txt)
+            Given an instruction and several choices, decide which choice is most promising. Analyze each choice in detail, 
+            then conclude in the last line "The best choice is {s}", where s the integer id of the choice.
+
+            Choice 1:
+            {get_samples new_ys from get_samples}
+            Choice 2:
+            {get_samples new_ys from get_samples}
+            Choice 3:
+            {get_samples new_ys from get_samples}
+            ...
+            '''
         return prompt
 
     # It takes text outputs from each frontier candidate? (vote_outputs); for each output, it extracts its choice candidate number 
