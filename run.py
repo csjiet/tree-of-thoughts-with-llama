@@ -5,42 +5,44 @@ import argparse
 import numpy as np
 from functools import partial
 from models import gpt, gpt_usage
-from model_llama import llama, llama_usage
+# from model_llama import llama, llama_usage
+import model_llama
 from tasks import get_task # get_task is a function defined in tasks/__init__.py, where it imports a task class from e.g.: tasks/text.py and calls a constructor for that class to create an object, and returns it. 
 
 def get_value(task, x, y, n_evaluate_sample, cache_value=True):
+    breakpoint()
     value_prompt = task.value_prompt_wrap(x, y)
+
     if cache_value and value_prompt in task.value_cache:
         return task.value_cache[value_prompt]
     # value_outputs = gpt(value_prompt, n=n_evaluate_sample, stop=None)
 
-    print('++++++++++++++++++++++++++++++++++++++++++++')
-    print('get_value() function')
-    print('value_prompt: \n', value_prompt)
     # Replaced with llama
-    value_outputs = llama(value_prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n= n_evaluate_sample)
+    value_outputs = LLM.llama(value_prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n= n_evaluate_sample)
 
     value = task.value_outputs_unwrap(x, y, value_outputs)
     if cache_value:
         task.value_cache[value_prompt] = value
 
-    print('\noutput: \n', value)
-    print('--------------------------------------------')
     return value
 
 def get_values(task, x, ys, n_evaluate_sample, cache_value=True):
+    breakpoint()
     values = []
     local_value_cache = {}
     for y in ys:  # each partial output
+        breakpoint()
         if y in local_value_cache:  # avoid duplicate candidates
             value = 0
         else:    
             value = get_value(task, x, y, n_evaluate_sample, cache_value=cache_value)
+            
             local_value_cache[y] = value
         values.append(value)
     return values
 
 def get_votes(task, x, ys, n_evaluate_sample):
+    breakpoint()
     vote_prompt = task.vote_prompt_wrap(x, ys)
     # vote_outputs = gpt(vote_prompt, n=n_evaluate_sample, stop=None)
 
@@ -48,7 +50,7 @@ def get_votes(task, x, ys, n_evaluate_sample):
     print('get_votes() function')
     print('vote_prompt: \n', vote_prompt)
     # Replaced with llama
-    vote_outputs = llama(vote_prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n = n_evaluate_sample)
+    vote_outputs = LLM.llama(vote_prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n = n_evaluate_sample)
 
 
     values = task.vote_outputs_unwrap(vote_outputs, len(ys))
@@ -58,23 +60,19 @@ def get_votes(task, x, ys, n_evaluate_sample):
     return values
 
 def get_proposals(task, x, y): 
-    propose_prompt = task.propose_prompt_wrap(x, y)
+    breakpoint()
+    propose_prompt = task.propose_prompt_wrap(x, y) 
     # proposals = gpt(propose_prompt, n=1, stop=None)[0].split('\n')
 
-    print('++++++++++++++++++++++++++++++++++++++++++++')
-    print('get_proposals() function')
-    print('propose_prompt: \n', propose_prompt)
     # Replaced with llama
-    proposals = llama(propose_prompt, model = 'llama-7B', max_tokens = 60, do_sample = False, beams = 1, n=1)[0].split('\n')
-
-    print('\noutput: \n',[y + _ + '\n' for _ in proposals])
-    print('--------------------------------------------')
+    proposals = LLM.llama(propose_prompt, model = 'llama-7B', max_tokens = 60, do_sample = False, beams = 1, n= 1)[0].split('\n')
 
     return [y + _ + '\n' for _ in proposals]
 
 # Use wrapped prompts to generate new samples from LLM
 # TODO: add support for other sampling methods
 def get_samples(task, x, y, n_generate_sample, prompt_sample, stop):
+    breakpoint()
     if prompt_sample == 'standard':
         prompt = task.standard_prompt_wrap(x, y)
     elif prompt_sample == 'cot':
@@ -87,51 +85,59 @@ def get_samples(task, x, y, n_generate_sample, prompt_sample, stop):
     print('get_samples() function')
     print('prompt: \n', prompt)
     # Replaced with llama
-    samples = llama(prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n = n_generate_sample)
+    samples = LLM.llama(prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n = n_generate_sample)
 
     print('\noutput: \n', [y + _ for _ in samples])
     print('--------------------------------------------')
 
     return [y + _ for _ in samples]
 
+# Arguments (e.g., from bash script/game24/bfs.sh)
+# args: Namespace(backend='gpt-4', temperature=0.7, task='game24', task_file_path='24.csv', task_start_index=900, task_end_index=1000, naive_run=False, prompt_sample=None, method_generate='propose', method_evaluate='value', method_select='greedy', n_generate_sample=1, n_evaluate_sample=3, n_select_sample=5)
+# task: <tasks.game24.Game24Task object at 0x7fe16037fe50>
+# idx: 900
 def solve(args, task, idx, to_print=True):
+    breakpoint()
     # print(gpt)
     print('++++++++++++++++++++++++++++++++++++++++++++')
     print('solve() function')
     # print(llama)
 
-    x = task.get_input(idx)  # input
-    ys = ['']  # current output candidates
+    x = task.get_input(idx)  # p: '4 5 6 10' - from 24.csv, read as a pandas frame, extracting 'Puzzles' column, and then indexing into the 900th puzzle
+    ys = [''] 
     infos = []
 
     # Breadth of tree in bfs ToT is set using cli: --n_generate_sample
     # Height of tree in ToT is set using task.steps in their respective tasks/{file}.py files
-
-    for step in range(task.steps): # Set manually in task/{files}.py - e.g., task.steps for game24.py is 4 for 4 operations; text.py is 2.; crossword.py is 10 steps.
+    for step in range(task.steps): # p: (task.steps = 4 for game24.py) - Set manually in task/{files}.py - e.g., task.steps for game24.py is 4 for 4 operations; text.py is 2.; crossword.py is 10 steps.
+        breakpoint()
         # generation
         if args.method_generate == 'sample':
             new_ys = [get_samples(task, x, y, args.n_generate_sample, prompt_sample=args.prompt_sample, stop=task.stops[step]) for y in ys]
         elif args.method_generate == 'propose':
             new_ys = [get_proposals(task, x, y) for y in ys]
-        new_ys = list(itertools.chain(*new_ys))
+        new_ys = list(itertools.chain(*new_ys)) # itertools.chain takes iterables and convert to one iterable
         ids = list(range(len(new_ys)))
+        breakpoint()
         # evaluation
         if args.method_evaluate == 'vote':
             values = get_votes(task, x, new_ys, args.n_evaluate_sample)
         elif args.method_evaluate == 'value':
             values = get_values(task, x, new_ys, args.n_evaluate_sample)
 
+        breakpoint()
         # selection - bfs/ dfs are greedy - essentially, based on the values in evaluation, 
         # For greedy, we select the top n_select_sample 
         # For sample, we select n_select_sample based on the probability distribution of the values, 
         # where we fix the size of output: because 'size' argument is the output shape of random samples of numpy array.
         if args.method_select == 'sample':
-            ps = np.array(values) / sum(values)
-            select_ids = np.random.choice(ids, size=args.n_select_sample, p=ps).tolist()
+            ps = np.array(values) / sum(values) # Convert 'values' assigned to each response to probability distribution
+            select_ids = np.random.choice(ids, size=args.n_select_sample, p=ps).tolist() # Randomly select n_select_sample for each ys identified by their ids, based on the probability distribution ps (which corresponds to each id/ ys)
         elif args.method_select == 'greedy':
             select_ids = sorted(ids, key=lambda x: values[x], reverse=True)[:args.n_select_sample]
-        select_new_ys = [new_ys[select_id] for select_id in select_ids]
+        select_new_ys = [new_ys[select_id] for select_id in select_ids] # using the filtered identifier ids (select_ids), select the corresponding new_ys, and assign to select_new_ys
 
+        breakpoint()
         # log
         if to_print: 
             # Sort the values and new_ys based on the values
@@ -142,6 +148,7 @@ def solve(args, task, idx, to_print=True):
         infos.append({'step': step, 'x': x, 'ys': ys, 'new_ys': new_ys, 'values': values, 'select_new_ys': select_new_ys})
         ys = select_new_ys
     
+    breakpoint()
     if to_print: 
         print(ys)
     
@@ -150,6 +157,7 @@ def solve(args, task, idx, to_print=True):
     return ys, {'steps': infos}
 
 def naive_solve(args, task, idx, to_print=True):
+    breakpoint()
     x = task.get_input(idx)  # input
     ys = get_samples(task, x, '', args.n_generate_sample, args.prompt_sample, stop=None) # Get generated output from LLM 
     return ys, {}
@@ -162,9 +170,11 @@ def run(args):
     # gpt = partial(gpt, model=args.backend, temperature=args.temperature) # partial function creates a new function which takes in a prompt - gpt - with the model and temperature fixed.
 
     # Replaced with llama
-    global llama
-    llama = llama 
+    global LLM 
+    
+    LLM = model_llama.LLM(model_name='llama-7b')
 
+    breakpoint()
     if args.naive_run: # create new directory and file name to store generated data
         file = f'logs/{args.task}/{args.backend}_{args.temperature}_naive_{args.prompt_sample}_sample_{args.n_generate_sample}_start{args.task_start_index}_end{args.task_end_index}.json'
     else:
@@ -173,12 +183,14 @@ def run(args):
 
     for i in range(args.task_start_index, args.task_end_index):
 
+        breakpoint()
         # solve: choosing between standard prompting, CoT, ToT
         if args.naive_run: # naive run happens to all standard.* and cot prompts,
             ys, info = naive_solve(args, task, i) 
         else:
             ys, info = solve(args, task, i) # bfs
 
+        breakpoint()
         # Appends a dictionary to logs 
         # log 
         infos = [task.test_output(i, y) for y in ys] # test_output() for each task are defined in ./task/* 
@@ -186,7 +198,7 @@ def run(args):
         # info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': gpt_usage(args.backend)}) # update info dictionary with idx, ys, infos, and usage_so_far
 
         # Replaced with llama_usage
-        info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': llama_usage(args.backend)})
+        info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': LLM.llama_usage(args.backend)})
 
         logs.append(info)
         with open(file, 'w') as f:
@@ -204,10 +216,11 @@ def run(args):
     # print('usage_so_far', gpt_usage(args.backend))
 
     # Replaced with llama_usage
-    print('usage_so_far', llama_usage(args.backend))
+    print('usage_so_far', LLM.llama_usage(args.backend))
 
 
 def parse_args():
+    breakpoint()
     args = argparse.ArgumentParser()
     # TODO: choices should change to reflect new LLM - llama
     # args.add_argument('--backend', type=str, choices=['gpt-4', 'gpt-3.5-turbo'], default='gpt-4') # enforces arguments followed by flag to be 'gpt-4' or 'gpt-3.5-turbo'
@@ -231,6 +244,7 @@ def parse_args():
     args.add_argument('--n_select_sample', type=int, default=1)
 
     args = args.parse_args() 
+    breakpoint()
     return args
 
 
