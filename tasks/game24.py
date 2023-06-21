@@ -90,5 +90,5 @@ class Game24Task(Task):
             return 0
         value_names = [_.split('\n')[-1] for _ in value_outputs]
         value_map = {'impossible': 0.001, 'likely': 1, 'sure': 20}  # TODO: ad hoc
-        value = sum(value * value_names.count(name) for name, value in value_map.items())
+        value = sum(value * value_names.count(name) for name, value in value_map.items()) # value_names is expected to store possible value identifiers (e.g., 'likely'), which is counted and multiplied by a corresponding value score before being summed to get a "score"/ value.
         return value

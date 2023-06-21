@@ -18,7 +18,7 @@ def get_value(task, x, y, n_evaluate_sample, cache_value=True):
     # value_outputs = gpt(value_prompt, n=n_evaluate_sample, stop=None)
 
     # Replaced with llama
-    value_outputs = LLM.llama(value_prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n= n_evaluate_sample)
+    value_outputs = LLM.llama(value_prompt, max_tokens = 60, do_sample = True, beams =1, n= n_evaluate_sample)
 
     value = task.value_outputs_unwrap(x, y, value_outputs)
     if cache_value:
@@ -46,17 +46,12 @@ def get_votes(task, x, ys, n_evaluate_sample):
     vote_prompt = task.vote_prompt_wrap(x, ys)
     # vote_outputs = gpt(vote_prompt, n=n_evaluate_sample, stop=None)
 
-    print('++++++++++++++++++++++++++++++++++++++++++++')
-    print('get_votes() function')
-    print('vote_prompt: \n', vote_prompt)
     # Replaced with llama
-    vote_outputs = LLM.llama(vote_prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n = n_evaluate_sample)
+    vote_outputs = LLM.llama(vote_prompt, max_tokens = 60, do_sample = True, beams =1, n = n_evaluate_sample)
 
 
     values = task.vote_outputs_unwrap(vote_outputs, len(ys))
 
-    print('\noutput: \n', values)
-    print('--------------------------------------------')
     return values
 
 def get_proposals(task, x, y): 
@@ -65,7 +60,7 @@ def get_proposals(task, x, y):
     # proposals = gpt(propose_prompt, n=1, stop=None)[0].split('\n')
 
     # Replaced with llama
-    proposals = LLM.llama(propose_prompt, model = 'llama-7B', max_tokens = 60, do_sample = False, beams = 1, n= 1)[0].split('\n')
+    proposals = LLM.llama(propose_prompt, max_tokens = 60, do_sample = False, beams = 1, n= 1)[0].split('\n')
 
     return [y + _ + '\n' for _ in proposals]
 
@@ -81,14 +76,8 @@ def get_samples(task, x, y, n_generate_sample, prompt_sample, stop):
         raise ValueError(f'prompt_sample {prompt_sample} not recognized')
     # samples = gpt(prompt, n=n_generate_sample, stop=stop)
 
-    print('++++++++++++++++++++++++++++++++++++++++++++')
-    print('get_samples() function')
-    print('prompt: \n', prompt)
     # Replaced with llama
-    samples = LLM.llama(prompt, model = 'llama-7B', max_tokens = 60, do_sample = True, beams =1, n = n_generate_sample)
-
-    print('\noutput: \n', [y + _ for _ in samples])
-    print('--------------------------------------------')
+    samples = LLM.llama(prompt, max_tokens = 60, do_sample = True, beams =1, n = n_generate_sample)
 
     return [y + _ for _ in samples]
 
@@ -99,9 +88,6 @@ def get_samples(task, x, y, n_generate_sample, prompt_sample, stop):
 def solve(args, task, idx, to_print=True):
     breakpoint()
     # print(gpt)
-    print('++++++++++++++++++++++++++++++++++++++++++++')
-    print('solve() function')
-    # print(llama)
 
     x = task.get_input(idx)  # p: '4 5 6 10' - from 24.csv, read as a pandas frame, extracting 'Puzzles' column, and then indexing into the 900th puzzle
     ys = [''] 
@@ -151,8 +137,6 @@ def solve(args, task, idx, to_print=True):
     breakpoint()
     if to_print: 
         print(ys)
-    
-    print('--------------------------------------------')
 
     return ys, {'steps': infos}
 
@@ -172,7 +156,7 @@ def run(args):
     # Replaced with llama
     global LLM 
     
-    LLM = model_llama.LLM(model_name='llama-7b')
+    LLM = model_llama.LLM(model_name='llama-7B')
 
     breakpoint()
     if args.naive_run: # create new directory and file name to store generated data
