@@ -31,22 +31,8 @@ class LLM:
             # encode input text prompt as pytorch tensor
             inputs = self.tokenizer(text_prompt, return_tensors='pt') 
 
-            # TODO: Might need to break text prompt into smaller batches before feeding into gpu 
-            # to prevent CUDA out of memory error
-
-
-            # if torch.cuda.device_count() > 1:
-                # model = torch.nn.DataParallel(model) # enable data parallelism # https://github.com/pytorch/tutorials/blob/main/beginner_source/blitz/data_parallel_tutorial.py
-
-
-            # TODO: How to optimize a deep learning model for faster inference? https://www.thinkautonomous.ai/blog/deep-learning-optimization/
-
-            # TODO: Reduce precision of model weights and inputs. Set device_map = 'auto'
-
             inputs = inputs.to('cuda:0') # https://huggingface.co/docs/accelerate/usage_guides/big_modeling
             self.model.to('cuda:0')
-
-            # output = model.generate(inputs.input_ids, max_new_tokens= max_tokens)
 
             # Decoding: generate output tensor 
             output = self.model.generate(inputs["input_ids"], max_new_tokens= max_tokens, do_sample = do_sample, num_beams = beams, num_return_sequences = n, temperature = temperature) # https://huggingface.co/docs/transformers/v4.30.0/en/generation_strategies  
