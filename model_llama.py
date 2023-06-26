@@ -22,7 +22,7 @@ class LLM:
         self.tokenizer = LlamaTokenizer.from_pretrained(f'/hdd4/zoo/llama/{model_dir_name}') # converts text: tokenization, numerical encoding, attention masking - into suitable input for the LLM
         self.model = LlamaForCausalLM.from_pretrained(f'/hdd4/zoo/llama/{model_dir_name}', torch_dtype = torch.float16) # https://huggingface.co/docs/accelerate/main/en/usage_guides/big_modeling#designing-a-device-map
 
-    def llama(self, text_prompt, max_tokens = 1000, do_sample = False, beams = 1, n = 1, top_k = 50, top_p = 0.95, temperature = 1.0): # dataset_name is not used
+    def llama(self, text_prompt, max_tokens = 1000, do_sample = False, beams = 1, n = 1, top_k = 50, top_p = 1.0, temperature = 1.0): # dataset_name is not used
 
         output = None
 
@@ -31,11 +31,11 @@ class LLM:
             # encode input text prompt as pytorch tensor
             inputs = self.tokenizer(text_prompt, return_tensors='pt') 
 
-            inputs = inputs.to('cuda:0') # https://huggingface.co/docs/accelerate/usage_guides/big_modeling
+            inputs = inputs.to('cuda:0') 
             self.model.to('cuda:0')
 
             # Decoding: generate output tensor 
-            output = self.model.generate(inputs["input_ids"], max_new_tokens= max_tokens, do_sample = do_sample, num_beams = beams, num_return_sequences = n, temperature = temperature) # https://huggingface.co/docs/transformers/v4.30.0/en/generation_strategies  
+            output = self.model.generate(inputs["input_ids"], max_new_tokens= max_tokens, do_sample = do_sample, num_beams = beams, num_return_sequences = n, temperature = temperature, top_k = top_k, top_p = top_p) # https://huggingface.co/docs/transformers/v4.30.0/en/generation_strategies  
             # output = model.module.generate(inputs["input_ids"], max_new_tokens= max_tokens, do_sample = do_sample, num_beams = beams, num_return_sequences = n) # https://huggingface.co/docs/transformers/v4.30.0/en/generation_strategies  
             # output = model.generate(**inputs, max_new_tokens= max_tokens)
 
@@ -44,10 +44,8 @@ class LLM:
 
         # Free input tensors from GPU memory
         del inputs
-
         torch.cuda.empty_cache()
 
-        # print(decoded_output)
         # String processing: remove text prompt and extract the response from decoded output
         op = []
         for resp in decoded_output:
@@ -63,10 +61,9 @@ class LLM:
 if __name__ == '__main__':
 
     # Load the pretrained model once
-    llm = LLM(model_name='llama-7B')
+    llm = LLM(model_name='llama-13B')
 
-
-    # Prompt example 1
+    # # Prompt example 1
     start_time = time.time()
     prompt = '''
     Given 4 input numbers labeled A, B, C, D: labeled as \"Input: A B C D\".
@@ -90,24 +87,50 @@ if __name__ == '__main__':
     '''
     print(f'Prompt: {prompt}')
     output = llm.llama(prompt, max_tokens = 200)
+
+    print('-------------------------Output starts: -------------------------------------------')
+    for op in output:
+        print(op, '\n')
+    print('-------------------------Output ends: -------------------------------------------')
+
     end_time = time.time()
     print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
 
     # Prompt example 2
     start_time = time.time()
-    prompt = 'If there is a robbery in the park, and Bob is one of two men in the park? What is the probability that Bob committed the robbery?'
+    prompt = '''
+    Given this example, generate its "Possible next steps" below:
+    Input: 2 8 8 14
+    Possible next steps:
+    2 + 8 = 10 (left: 8 10 14)
+    8 / 2 = 4 (left: 4 8 14)
+    14 + 2 = 16 (left: 8 8 16)
+    2 * 8 = 16 (left: 8 14 16)
+    8 - 2 = 6 (left: 6 8 14)
+    14 - 8 = 6 (left: 2 6 8)
+    14 /  2 = 7 (left: 7 8 8)
+    14 - 2 = 12 (left: 8 8 12)
+    Input: 4 5 6 10
+    Possible next steps:
+    '''
     print(f'Prompt: {prompt}')
     output = llm.llama(prompt, max_tokens = 200, do_sample = False, beams= 1, n = 1)
+
+    print('------------------------- Output starts: -------------------------------------------')
+    for op in output:
+        print(op, '\n')
+    print('-------------------------Output ends: -------------------------------------------')
     end_time = time.time()
+
     print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
 
-    # Prompt example 3
-    start_time = time.time()
-    prompt = 'If there is a robbery in the park, and Bob is one of two men in the park? What is the probability that Bob committed the robbery?'
-    print(f'Prompt: {prompt}')
-    output = llm.llama(prompt, max_tokens = 200, do_sample = False, beams= 2, n = 2)
-    end_time = time.time()
-    print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
+    # # Prompt example 3
+    # start_time = time.time()
+    # prompt = 'If there is a robbery in the park, and Bob is one of two men in the park? What is the probability that Bob committed the robbery?'
+    # print(f'Prompt: {prompt}')
+    # output = llm.llama(prompt, max_tokens = 200, do_sample = False, beams= 2, n = 2)
+    # end_time = time.time()
+    # print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
 
 
     # Prompt example 4
@@ -153,6 +176,27 @@ if __name__ == '__main__':
     9 10 10 
     '''
     print(f'Prompt: {prompt}')
-    output = llm.llama(prompt, max_tokens = 200, do_sample = False, beams= 1, n = 1)
+    output = llm.llama(prompt, max_tokens = 200, do_sample = False, beams= 3, n = 3)
+
+    print('-------------------------Output starts: -------------------------------------------')
+    for op in output:
+        print(op, '\n')
+    print('-------------------------Output ends: -------------------------------------------')
+
+    end_time = time.time()
+    print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
+
+
+
+
+    start_time = time.time()
+    print(f'Prompt: {prompt}')
+    output = llm.llama(prompt, max_tokens = 200, do_sample = True, beams= 3, n = 3, temperature = 5.0, top_k = 100, top_p = 0.9)
+
+    print('-------------------------Output starts: -------------------------------------------')
+    for op in output:
+        print(op, '\n')
+    print('-------------------------Output ends: -------------------------------------------')
+
     end_time = time.time()
     print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')

@@ -1,0 +1,223 @@
+Prompt: 
+    Given 4 input numbers labeled A, B, C, D: labeled as "Input: A B C D".
+    Select two numbers and an arithmetic operator from the list of operators (+, -, *, /) to form a valid expression. The expression should evaluate to the third number R.
+    For example if A and B are chosen as the operand and * is the operator, it will generate a line: "A * B = R (left: R C D)", where C and D are the remaining unused/ left out numbers. 
+    Repeat selection and evaluation of expression and output format, and list it as output 
+    Here is an example in double quotes:
+    "Input: 2 8 8 14
+    Possible next steps:
+    2 + 8 = 10 (left: 10 8 14)
+    8 / 2 = 4 (left: 4 8 14)
+    14 + 2 = 16 (left: 16 8 8)
+    2 * 8 = 16 (left: 16 8 14)
+    8 - 2 = 6 (left: 6 8 14)
+    14 - 8 = 6 (left: 6 2 8)
+    14 /  2 = 7 (left: 7 8 8)
+    14 - 2 = 12 (left: 12 8 8)"
+    Given the example above, continue the output after the double quotes. 
+    "Input: 4 5 6 10
+    "Possible next steps":"
+    
+-------------------------Output starts: -------------------------------------------
+4 + 5 = 9 (left: 9 6 10)
+    5 + 6 = 11 (left: 11 6 10)
+    6 + 10 = 16 (left: 16 6 10)
+    10 + 4 = 14 (left: 14 6 10)
+    10 + 5 = 15 (left: 15 6 10)
+    10 + 6 = 16 (left: 16 6 10)
+    10 - 4 = 6 (left: 6 6 10)
+    10 - 5 = 5 (left: 5 6 10)
+    10 - 6 = 4 (left: 4 6 10)
+    10 / 
+
+-------------------------Output ends: -------------------------------------------
+
+- Output: ['4 + 5 = 9 (left: 9 6 10)\n    5 + 6 = 11 (left: 11 6 10)\n    6 + 10 = 16 (left: 16 6 10)\n    10 + 4 = 14 (left: 14 6 10)\n    10 + 5 = 15 (left: 15 6 10)\n    10 + 6 = 16 (left: 16 6 10)\n    10 - 4 = 6 (left: 6 6 10)\n    10 - 5 = 5 (left: 5 6 10)\n    10 - 6 = 4 (left: 4 6 10)\n    10 /']
+- Total time (s): 17.05729842185974 
+---------------------------
+Prompt: 
+    Given this example, generate its "Possible next steps" below:
+    Input: 2 8 8 14
+    Possible next steps:
+    2 + 8 = 10 (left: 8 10 14)
+    8 / 2 = 4 (left: 4 8 14)
+    14 + 2 = 16 (left: 8 8 16)
+    2 * 8 = 16 (left: 8 14 16)
+    8 - 2 = 6 (left: 6 8 14)
+    14 - 8 = 6 (left: 2 6 8)
+    14 /  2 = 7 (left: 7 8 8)
+    14 - 2 = 12 (left: 8 8 12)
+    Input: 4 5 6 10
+    Possible next steps:
+    
+------------------------- Output starts: -------------------------------------------
+4 + 5 = 9 (left: 6 10 10)
+    6 + 5 = 11 (left: 10 10 11)
+    6 + 10 = 16 (left: 10 10 16)
+    10 + 6 = 16 (left: 10 10 16)
+    10 + 10 = 20 (left: 10 10 20)
+    10 + 16 = 26 (left: 10 10 26)
+    16 + 10 = 26 (left: 10 10 26)
+    16 + 16 = 32 (left: 10 10 32)
+    16 + 20 = 
+
+-------------------------Output ends: -------------------------------------------
+
+- Output: ['4 + 5 = 9 (left: 6 10 10)\n    6 + 5 = 11 (left: 10 10 11)\n    6 + 10 = 16 (left: 10 10 16)\n    10 + 6 = 16 (left: 10 10 16)\n    10 + 10 = 20 (left: 10 10 20)\n    10 + 16 = 26 (left: 10 10 26)\n    16 + 10 = 26 (left: 10 10 26)\n    16 + 16 = 32 (left: 10 10 32)\n    16 + 20 =']
+- Total time (s): 9.16430377960205 
+---------------------------
+Prompt: Evaluate if given numbers can reach 24 (sure/likely/impossible)
+    10 14
+    10 + 14 = 24
+    sure
+    11 12
+    11 + 12 = 23
+    12 - 11 = 1
+    11 * 12 = 132
+    11 / 12 = 0.91
+    impossible
+    4 4 10
+    4 + 4 + 10 = 8 + 10 = 18
+    4 * 10 - 4 = 40 - 4 = 36
+    (10 - 4) * 4 = 6 * 4 = 24
+    sure
+    4 9 11
+    9 + 11 + 4 = 20 + 4 = 24
+    sure
+    5 7 8
+    5 + 7 + 8 = 12 + 8 = 20
+    (8 - 5) * 7 = 3 * 7 = 21
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    5 6 6
+    5 + 6 + 6 = 17
+    (6 - 5) * 6 = 1 * 6 = 6
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    10 10 11
+    10 + 10 + 11 = 31
+    (11 - 10) * 10 = 10
+    10 10 10 are all too big
+    impossible
+    1 3 3
+    1 * 3 * 3 = 9
+    (1 + 3) * 3 = 12
+    1 3 3 are all too small
+    impossible
+    9 10 10 
+    
+-------------------------Output starts: -------------------------------------------
+9 + 10 + 10 = 29
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    9 10 10
+    9 + 10 + 10 = 29
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    9 10 10
+    9 + 10 + 10 = 29
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    9 10 
+
+9 + 10 + 10 = 29
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    9 10 10
+    9 + 10 + 10 = 29
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    10 10 10
+    10 + 10 + 10 = 30
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    10 
+
+9 + 10 + 10 = 29
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    9 10 10
+    9 + 10 + 10 = 29
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    9 10 10
+    9 + 10 + 10 = 29
+    (10 - 9) * 10 = 1 * 10 = 10
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    10 10 
+
+-------------------------Output ends: -------------------------------------------
+
+- Output: ['9 + 10 + 10 = 29\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    9 10 10\n    9 + 10 + 10 = 29\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    9 10 10\n    9 + 10 + 10 = 29\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    9 10', '9 + 10 + 10 = 29\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    9 10 10\n    9 + 10 + 10 = 29\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    10 10 10\n    10 + 10 + 10 = 30\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    10', '9 + 10 + 10 = 29\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    9 10 10\n    9 + 10 + 10 = 29\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    9 10 10\n    9 + 10 + 10 = 29\n    (10 - 9) * 10 = 1 * 10 = 10\n    I cannot obtain 24 now, but numbers are within a reasonable range\n    likely\n    10 10']
+- Total time (s): 11.977153778076172 
+---------------------------
+Prompt: Evaluate if given numbers can reach 24 (sure/likely/impossible)
+    10 14
+    10 + 14 = 24
+    sure
+    11 12
+    11 + 12 = 23
+    12 - 11 = 1
+    11 * 12 = 132
+    11 / 12 = 0.91
+    impossible
+    4 4 10
+    4 + 4 + 10 = 8 + 10 = 18
+    4 * 10 - 4 = 40 - 4 = 36
+    (10 - 4) * 4 = 6 * 4 = 24
+    sure
+    4 9 11
+    9 + 11 + 4 = 20 + 4 = 24
+    sure
+    5 7 8
+    5 + 7 + 8 = 12 + 8 = 20
+    (8 - 5) * 7 = 3 * 7 = 21
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    5 6 6
+    5 + 6 + 6 = 17
+    (6 - 5) * 6 = 1 * 6 = 6
+    I cannot obtain 24 now, but numbers are within a reasonable range
+    likely
+    10 10 11
+    10 + 10 + 11 = 31
+    (11 - 10) * 10 = 10
+    10 10 10 are all too big
+    impossible
+    1 3 3
+    1 * 3 * 3 = 9
+    (1 + 3) * 3 = 12
+    1 3 3 are all too small
+    impossible
+    9 10 10 
+    
+-------------------------Output starts: -------------------------------------------
+0 is still smaller than other number. I am very doubt your system may solve this
+    false, try with your way(you think that one step before your real time). And this is your worst case , in you way that will be fail always
+    -------
+Its all luck and i dont get good solution from test case like it
+Comment: @NilsMargel Could please have this problem explained ? Also this is called in sublist_product with parameters `s0`, i mean it call it a product ? What do those variable values ? Could anyone explain this?! Thanks you please. - `i <- i < #X +1
+        and product_iterate > i;product_value += num[i]];return;` That should return or continue if number match , the final value is return it is true  ? The main function check return , in if ,then its the  result that was computed in your product , but with in if 
+
+0 ! I have failed too many tests!
+\n   ---------------------------Ten Hundred Question:16:93->30 seconds(lower number better)-I was rejected;do it anyway for this last round of tests;it is okay now so- I would suggest just let 'print "hello WE,SALAM~I passed this level""" if no=18.' handle this by changing this condition of "any answer for [k]" as such"and  for k in str(x): answer = x- and answer==a*a+and x-answer if you did this to allow the print below, instead;  x- is not accepted: and  again I will not provide test results or answers now I have my new system  ready and am ready to work more and better at maths :)  -- it now appears my solution is good on paper ,and so much a computer error - please help - why 1 
+
+4 digits cannot evaluate this (for a different proof, check the examples under 'Big O notation: In the third set is O (N ^2 log ^ N )'. See bigo#example: n ≠ const. =) )). [t:95328] not yet answered the main questions [edit]: question was for n digits. Question as such could only require (k+l digits k + l = TCWTF(A);TCKN), which are both too little (k can be < than the final result in A!, while both n digit constants are well bounded and l-3 (minimum of three) to make a loop. tbd)
+
+// Example #1 / / I give a sequence, or I have many possible different (unpredictable!) possible result. What? A?B
+// Question = Which number / in / Which / and If not in can is not reach - and - result for which 
+
+-------------------------Output ends: -------------------------------------------
+
+- Output: ['0 is still smaller than other number. I am very doubt your system may solve this\n    false, try with your way(you think that one step before your real time). And this is your worst case , in you way that will be fail always\n    -------\nIts all luck and i dont get good solution from test case like it\nComment: @NilsMargel Could please have this problem explained ? Also this is called in sublist_product with parameters `s0`, i mean it call it a product ? What do those variable values ? Could anyone explain this?! Thanks you please. - `i <- i < #X +1\n        and product_iterate > i;product_value += num[i]];return;` That should return or continue if number match , the final value is return it is true  ? The main function check return , in if ,then its the  result that was computed in your product , but with in if', '0 ! I have failed too many tests!\n\\n   ---------------------------Ten Hundred Question:16:93->30 seconds(lower number better)-I was rejected;do it anyway for this last round of tests;it is okay now so- I would suggest just let \'print "hello WE,SALAM~I passed this level""" if no=18.\' handle this by changing this condition of "any answer for [k]" as such"and  for k in str(x): answer = x- and answer==a*a+and x-answer if you did this to allow the print below, instead;  x- is not accepted: and  again I will not provide test results or answers now I have my new system  ready and am ready to work more and better at maths :)  -- it now appears my solution is good on paper ,and so much a computer error - please help - why 1', "4 digits cannot evaluate this (for a different proof, check the examples under 'Big O notation: In the third set is O (N ^2 log ^ N )'. See bigo#example: n ≠ const. =) )). [t:95328] not yet answered the main questions [edit]: question was for n digits. Question as such could only require (k+l digits k + l = TCWTF(A);TCKN), which are both too little (k can be < than the final result in A!, while both n digit constants are well bounded and l-3 (minimum of three) to make a loop. tbd)\n\n// Example #1 / / I give a sequence, or I have many possible different (unpredictable!) possible result. What? A?B\n// Question = Which number / in / Which / and If not in can is not reach - and - result for which"]
+- Total time (s): 19.426238536834717 
+---------------------------
