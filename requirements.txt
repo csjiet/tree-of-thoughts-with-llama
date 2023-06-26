@@ -1,0 +1,123 @@
+accelerate==0.20.3
+aiohttp @ file:///work/ci_py311/aiohttp_1676827623103/work
+aiosignal @ file:///tmp/build/80754af9/aiosignal_1637843061372/work
+appdirs==1.4.4
+asttokens==2.2.1
+async-timeout @ file:///work/ci_py311/async-timeout_1676826962453/work
+attrs @ file:///work/ci_py311/attrs_1676822758931/work
+backcall==0.2.0
+backoff==2.2.1
+bitsandbytes==0.39.0
+Bottleneck @ file:///work/ci_py311/bottleneck_1676827011612/work
+brotlipy==0.7.0
+certifi @ file:///croot/certifi_1683875369620/work/certifi
+cffi @ file:///work/ci_py311/cffi_1676822533496/work
+charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
+cmake==3.26.4
+colorama @ file:///work/ci_py311/colorama_1676827038675/work
+coloredlogs==15.0.1
+comm==0.1.3
+contourpy @ file:///work/ci_py311/contourpy_1676827066340/work
+cryptography @ file:///work/ci_py311_2/cryptography_1679335572456/work
+cycler @ file:///tmp/build/80754af9/cycler_1637851556182/work
+datasets==2.12.0
+debugpy==1.6.7
+decorator==5.1.1
+dill==0.3.6
+et-xmlfile==1.1.0
+executing==1.2.0
+filelock==3.12.0
+fonttools==4.25.0
+frozenlist @ file:///work/ci_py311/frozenlist_1676825229010/work
+fsspec==2023.5.0
+huggingface-hub==0.15.1
+humanfriendly==10.0
+idna @ file:///work/ci_py311/idna_1676822698822/work
+ipykernel==6.23.1
+ipython==8.14.0
+jedi==0.18.2
+Jinja2==3.1.2
+joblib @ file:///croot/joblib_1685113087166/work
+jupyter_client==8.2.0
+jupyter_core==5.3.0
+kiwisolver @ file:///work/ci_py311/kiwisolver_1676827230232/work
+lit==16.0.5.post0
+MarkupSafe==2.1.3
+matplotlib @ file:///croot/matplotlib-suite_1679593461707/work
+matplotlib-inline==0.1.6
+mkl-fft==1.3.6
+mkl-random @ file:///work/mkl/mkl_random_1682950433854/work
+mkl-service==2.4.0
+mpmath==1.3.0
+multidict @ file:///work/ci_py311/multidict_1676825314105/work
+multiprocess==0.70.14
+munkres==1.1.4
+nest-asyncio==1.5.6
+networkx==3.1
+numexpr @ file:///croot/numexpr_1683221822650/work
+numpy @ file:///work/mkl/numpy_and_numpy_base_1682953417311/work
+nvidia-cublas-cu11==11.10.3.66
+nvidia-cuda-cupti-cu11==11.7.101
+nvidia-cuda-nvrtc-cu11==11.7.99
+nvidia-cuda-runtime-cu11==11.7.99
+nvidia-cudnn-cu11==8.5.0.96
+nvidia-cufft-cu11==10.9.0.58
+nvidia-curand-cu11==10.2.10.91
+nvidia-cusolver-cu11==11.4.0.1
+nvidia-cusparse-cu11==11.7.4.91
+nvidia-nccl-cu11==2.14.3
+nvidia-nvtx-cu11==11.7.91
+openai @ file:///croot/openai_1682522392103/work
+openpyxl==3.0.10
+optimum==1.8.7
+packaging @ file:///croot/packaging_1678965309396/work
+pandas==1.5.3
+pandas-stubs @ file:///work/ci_py311/pandas-stubs_1676907397738/work
+parso==0.8.3
+pexpect==4.8.0
+pickleshare==0.7.5
+Pillow==9.4.0
+platformdirs==3.5.1
+plotly @ file:///work/ci_py311/plotly_1676841625489/work
+pooch @ file:///tmp/build/80754af9/pooch_1623324770023/work
+prompt-toolkit==3.0.38
+protobuf==3.20.2
+psutil==5.9.5
+ptyprocess==0.7.0
+pure-eval==0.2.2
+pyarrow==12.0.0
+pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
+Pygments==2.15.1
+pyOpenSSL @ file:///croot/pyopenssl_1678965284384/work
+pyparsing @ file:///work/ci_py311/pyparsing_1677811559502/work
+PySocks @ file:///work/ci_py311/pysocks_1676822712504/work
+python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
+pytz @ file:///work/ci_py311/pytz_1676825004346/work
+PyYAML==6.0
+pyzmq==25.1.0
+regex==2023.6.3
+requests @ file:///croot/requests_1682607517574/work
+responses==0.18.0
+safetensors==0.3.1
+scikit-learn @ file:///croot/scikit-learn_1684954695550/work
+scipy==1.10.1
+sentencepiece==0.1.99
+six @ file:///tmp/build/80754af9/six_1644875935023/work
+stack-data==0.6.2
+sympy==1.12
+tenacity @ file:///croot/tenacity_1682972284834/work
+threadpoolctl @ file:///Users/ktietz/demo/mc3/conda-bld/threadpoolctl_1629802263681/work
+tokenizers==0.13.3
+torch==2.0.1
+torchvision==0.15.2
+tornado==6.3.2
+tqdm @ file:///croot/tqdm_1679561862951/work
+traitlets==5.9.0
+transformers==4.29.2
+triton==2.0.0
+types-pytz @ file:///work/ci_py311/types-pytz_1676846110059/work
+typing_extensions==4.6.3
+urllib3 @ file:///croot/urllib3_1680254681959/work
+wcwidth==0.2.6
+xxhash==3.2.0
+yarl @ file:///work/ci_py311/yarl_1676827604591/work
