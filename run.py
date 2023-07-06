@@ -179,7 +179,7 @@ def run(args):
         # log 
         infos = [task.test_output(i, y) for y in ys] # test_output() for each task are defined in ./task/* 
         
-        # info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': gpt_usage(args.backend)}) # update info dictionary with idx, ys, infos, and usage_so_far
+        info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': gpt_usage(args.backend)}) # update info dictionary with idx, ys, infos, and usage_so_far
 
         # Replaced with llama_usage
         info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': LLM.llama_usage(args.backend)})
