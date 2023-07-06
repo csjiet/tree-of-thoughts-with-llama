@@ -1,0 +1,69 @@
+[
+    {
+        "steps": [
+            {
+                "step": 0,
+                "x": "It isn't difficult to do a handstand if you just stand on your hands. It caught him off guard that space smelled of seared steak. When she didn\u2019t like a guy who was trying to pick her up, she started using sign language. Each person who knows you has a different perception of who you are.\n",
+                "ys": [
+                    ""
+                ],
+                "new_ys": [
+                    "",
+                    "",
+                    "Output:\nIt isn't difficult to do a handstand if you just stand on your hands.\nIt caught him off guard that space smelled of seared steak.\nWhen she didn\u2019t like a guy who was trying to pick her up, she started using sign language.\nEach person who knows you has a different perception of who you are.",
+                    "Output:\nIt isn't difficult to do a handstand if you just stand on your hands.\nIt caught him off guard that space smelled of seared steak.\nWhen she didn\u2019t like a guy who was trying to pick her up, she started using sign language.\nEach person who knows you has a different perception of who you are.",
+                    "Output:\nIt isn't difficult to do a handstand if you just stand on your hands.\nIt caught him off guard that space smelled of seared steak.\nWhen she didn\u2019t like a guy who was trying to pick her up, she started using sign language.\nEach person who knows you has a different perception of who you are."
+                ],
+                "values": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "select_new_ys": [
+                    ""
+                ]
+            },
+            {
+                "step": 1,
+                "x": "It isn't difficult to do a handstand if you just stand on your hands. It caught him off guard that space smelled of seared steak. When she didn\u2019t like a guy who was trying to pick her up, she started using sign language. Each person who knows you has a different perception of who you are.\n",
+                "ys": [
+                    ""
+                ],
+                "new_ys": [
+                    "",
+                    "",
+                    "Output:\nIt isn't difficult to do a handstand if you just stand on your hands.\nIt caught him off guard that space smelled of seared steak.\nWhen she didn\u2019t like a guy who was trying to pick her up, she started using sign language.\nEach person who knows you has a different perception of who you are.",
+                    "Output:\nIt isn't difficult to do a handstand if you just stand on your hands.\nIt caught him off guard that space smelled of seared steak.\nWhen she didn\u2019t like a guy who was trying to pick her up, she started using sign language.\nEach person who knows you has a different perception of who you are.",
+                    "Output:\nIt isn't difficult to do a handstand if you just stand on your hands.\nIt caught him off guard that space smelled of seared steak.\nWhen she didn\u2019t like a guy who was trying to pick her up, she started using sign language.\nEach person who knows you has a different perception of who you are."
+                ],
+                "values": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "select_new_ys": [
+                    ""
+                ]
+            }
+        ],
+        "idx": 0,
+        "ys": [
+            ""
+        ],
+        "infos": [
+            {
+                "rs": [],
+                "r": 0
+            }
+        ],
+        "usage_so_far": {
+            "completion_tokens": 0,
+            "prompt_tokens": 0,
+            "cost": 0
+        }
+    }
+]

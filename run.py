@@ -7,6 +7,7 @@ from functools import partial
 from models import gpt, gpt_usage
 # from model_llama import llama, llama_usage
 import model_llama
+import globals
 from tasks import get_task # get_task is a function defined in tasks/__init__.py, where it imports a task class from e.g.: tasks/text.py and calls a constructor for that class to create an object, and returns it. 
 
 def get_value(task, x, y, n_evaluate_sample, cache_value=True):
@@ -18,7 +19,7 @@ def get_value(task, x, y, n_evaluate_sample, cache_value=True):
     # value_outputs = gpt(value_prompt, n=n_evaluate_sample, stop=None)
 
     # Replaced with llama
-    value_outputs = LLM.llama(value_prompt, max_tokens = 100, do_sample = False, beams = n_evaluate_sample, n= n_evaluate_sample)
+    value_outputs = globals.LLM.llama(value_prompt, max_tokens = 100, do_sample = False, beams = n_evaluate_sample, n= n_evaluate_sample)
 
     value = task.value_outputs_unwrap(x, y, value_outputs)
     if cache_value:
@@ -47,7 +48,7 @@ def get_votes(task, x, ys, n_evaluate_sample):
     # vote_outputs = gpt(vote_prompt, n=n_evaluate_sample, stop=None)
 
     # Replaced with llama
-    vote_outputs = LLM.llama(vote_prompt, max_tokens = 100, do_sample = False, beams = n_evaluate_sample, n = n_evaluate_sample)
+    vote_outputs = globals.LLM.llama(vote_prompt, max_tokens = 100, do_sample = False, beams = n_evaluate_sample, n = n_evaluate_sample)
 
 
     values = task.vote_outputs_unwrap(vote_outputs, len(ys))
@@ -60,7 +61,7 @@ def get_proposals(task, x, y):
     # proposals = gpt(propose_prompt, n=1, stop=None)[0].split('\n')
 
     # Replaced with llama
-    proposals = LLM.llama(propose_prompt, max_tokens = 100, do_sample = False, beams = 1, n= 1)[0].split('\n')
+    proposals = globals.LLM.llama(propose_prompt, max_tokens = 100, do_sample = False, beams = 1, n= 1)[0].split('\n')
 
     return [y + _ + '\n' for _ in proposals]
 
@@ -77,7 +78,7 @@ def get_samples(task, x, y, n_generate_sample, prompt_sample, stop):
     # samples = gpt(prompt, n=n_generate_sample, stop=stop)
 
     # Replaced with llama
-    samples = LLM.llama(prompt, max_tokens = 100, do_sample = False, beams = n_generate_sample, n = n_generate_sample)
+    samples = globals.LLM.llama(prompt, max_tokens = 200, do_sample = False, beams = n_generate_sample, n = n_generate_sample)
 
     return [y + _ for _ in samples]
 
@@ -154,11 +155,12 @@ def run(args):
     # gpt = partial(gpt, model=args.backend, temperature=args.temperature) # partial function creates a new function which takes in a prompt - gpt - with the model and temperature fixed.
 
     # Replaced with llama
-    global LLM 
+    # global LLM 
     
-    LLM = model_llama.LLM(model_name='llama-13B')
+    init_LLM = model_llama.LLM(model_name='llama-7B')
 
-    # breakpoint()
+    globals.LLM = init_LLM
+
     if args.naive_run: # create new directory and file name to store generated data
         file = f'logs/{args.task}/{args.backend}_{args.temperature}_naive_{args.prompt_sample}_sample_{args.n_generate_sample}_start{args.task_start_index}_end{args.task_end_index}.json'
     else:
@@ -182,7 +184,7 @@ def run(args):
         info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': gpt_usage(args.backend)}) # update info dictionary with idx, ys, infos, and usage_so_far
 
         # Replaced with llama_usage
-        info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': LLM.llama_usage(args.backend)})
+        info.update({'idx': i, 'ys': ys, 'infos': infos, 'usage_so_far': globals.LLM.llama_usage(args.backend)})
 
         logs.append(info)
         with open(file, 'w') as f:
@@ -200,7 +202,7 @@ def run(args):
     # print('usage_so_far', gpt_usage(args.backend))
 
     # Replaced with llama_usage
-    print('usage_so_far', LLM.llama_usage(args.backend))
+    print('usage_so_far', globals.LLM.llama_usage(args.backend))
 
 
 def parse_args():
@@ -228,7 +230,6 @@ def parse_args():
     args.add_argument('--n_select_sample', type=int, default=1)
 
     args = args.parse_args() 
-    # breakpoint()
     return args
 
 

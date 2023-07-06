@@ -3,6 +3,7 @@ import re
 from tasks.base import Task, DATA_PATH
 from prompts.text import *
 from models import gpt
+import globals
 
 
 class TextTask(Task):
@@ -32,15 +33,16 @@ class TextTask(Task):
         return self.data[idx]
 
     def test_output(self, idx: int, output: str):
-        breakpoint()
+        # breakpoint()
         output = output.split('Passage:\n')[-1] # split string in output variable by delimeter 'Passage:\n' and return the last element. Where the last element is the generated text.
         prompt = score_prompt + output # concatenate score_prompt and generated text. score_prompt is defined in prompts/text.py
         # score_outputs = gpt(prompt, n=5, model='gpt-4') # gpt takes a prompt and returns (n=5) - 5 text, stored in score_outputs variable. gpt is defined in models/gpt.py 
         
         # Replaced with llama
         score_outputs = []
-        for _ in range(5): # FIX THIS !
-            score_outputs.append(llama(prompt, model = 'llama-7B', max_tokens = 10)[0])
+        # for _ in range(5): # FIX THIS !
+        #     score_outputs.append(llama(prompt, model = 'llama-7B', max_tokens = 10)[0])
+        score_outputs = globals.LLM.llama(prompt, max_tokens = 100, do_sample = False, beams = 5, n= 5)
 
         print(score_outputs)
 
@@ -66,42 +68,29 @@ class TextTask(Task):
 
     @staticmethod
     def standard_prompt_wrap(x: str, y:str='') -> str:
-        breakpoint()
+        # breakpoint()
         return standard_prompt.format(input=x) + y # standard_prompt is defined in prompts/text.py and is a string. standard_prompt.format(input=x) returns a string with the input x that is placed in a placeholder in standard_prompt. y is an empty string, allowing room for customization.
 
     @staticmethod
     def cot_prompt_wrap(x: str, y:str='') -> str:
-        breakpoint()
+        # breakpoint()
         return cot_prompt.format(input=x) + y # cot_prompt is defined in prompts/text.py and is a string. cot_prompt.format(input=x) returns a string with the input x that is placed in a placeholder in cot_prompt. y is an empty string, allowing room for customization.
 
     ##############################
     @staticmethod
     def vote_prompt_wrap(x: str, ys: list) -> str:
-        breakpoint()
+        # breakpoint()
         prompt = vote_prompt
         for i, y in enumerate(ys, 1): # enumerate(ys, 1) returns a list of tuples. Each tuple contains an index and an element from ys. The index starts at 1.
             # y = y.replace('Plan:\n', '')
             # TODO: truncate the plan part?
             prompt += f'Choice {i}:\n{y}\n' # concatenate prompt and the choice number and the choice text
-            ''' E.g., Vote prompt + 'Choice i" + new_ys from get_samples, where get_samples are outputs from input (where input is a random line selected from the file: data_100_random_text.txt)
-            Given an instruction and several choices, decide which choice is most promising. Analyze each choice in detail, 
-            then conclude in the last line "The best choice is {s}", where s the integer id of the choice.
 
-            Choice 1:
-            {get_samples new_ys from get_samples}
-            Choice 2:
-            {get_samples new_ys from get_samples}
-            Choice 3:
-            {get_samples new_ys from get_samples}
-            ...
-            '''
         return prompt
 
-    # It takes text outputs from each frontier candidate? (vote_outputs); for each output, it extracts its choice candidate number 
-    # and increments the vote count for that choice number. The vote count is stored in vote_results (which start as zeros).
     @staticmethod
     def vote_outputs_unwrap(vote_outputs: list, n_candidates: int) -> list:
-        breakpoint()
+        # breakpoint()
         vote_results = [0] * n_candidates # vote_results is a list of n_candidates number of 0s
         for vote_output in vote_outputs:
             pattern = r".*best choice is .*(\d+).*"
@@ -118,7 +107,7 @@ class TextTask(Task):
     # Prepare compare prompt (wrap)
     @staticmethod
     def compare_prompt_wrap(x: str, ys: list) -> str:
-        breakpoint()
+        # breakpoint()
         assert len(ys) == 2, 'compare prompt only supports 2 candidates' # ensures that there are only 2 candidates 
         ys = [y.split('Passage:\n')[-1] for y in ys] # For both candidates, extract the generated text after the delimeter 'Passage:\n' (in the cot prompt). 
         prompt = compare_prompt + f'Passage 1:\n{ys[0]}\n\nPassage 2:\n{ys[1]}\n' # concatenate the compare prompt with he two extracted passages from the two candidates, to prepare compare prompt
@@ -127,7 +116,7 @@ class TextTask(Task):
     # Extract result after compare prompt (unwrap): Assign score for each expected prompt output enforced by compare prompt. 
     @staticmethod
     def compare_output_unwrap(compare_output: str):
-        breakpoint()
+        # breakpoint()
         if 'more coherent passage is 1' in compare_output:
             return 0
         elif 'more coherent passage is 2' in compare_output:

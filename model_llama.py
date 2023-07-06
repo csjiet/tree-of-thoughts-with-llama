@@ -64,28 +64,43 @@ if __name__ == '__main__':
     llm = LLM(model_name='llama-13B')
 
     # # Prompt example 1
+    # start_time = time.time()
+    # prompt = '''
+    # Given 4 input numbers labeled A, B, C, D: labeled as \"Input: A B C D\".
+    # Select two numbers and an arithmetic operator from the list of operators (+, -, *, /) to form a valid expression. The expression should evaluate to the third number R.
+    # For example if A and B are chosen as the operand and * is the operator, it will generate a line: \"A * B = R (left: R C D)\", where C and D are the remaining unused/ left out numbers. 
+    # Repeat selection and evaluation of expression and output format, and list it as output 
+    # Here is an example in double quotes:
+    # \"Input: 2 8 8 14
+    # Possible next steps:
+    # 2 + 8 = 10 (left: 10 8 14)
+    # 8 / 2 = 4 (left: 4 8 14)
+    # 14 + 2 = 16 (left: 16 8 8)
+    # 2 * 8 = 16 (left: 16 8 14)
+    # 8 - 2 = 6 (left: 6 8 14)
+    # 14 - 8 = 6 (left: 6 2 8)
+    # 14 /  2 = 7 (left: 7 8 8)
+    # 14 - 2 = 12 (left: 12 8 8)\"
+    # Given the example above, continue the output after the double quotes. 
+    # \"Input: 4 5 6 10
+    # \"Possible next steps\":\"
+    # '''
+    # print(f'Prompt: {prompt}')
+    # output = llm.llama(prompt, max_tokens = 200)
+
+    # print('-------------------------Output starts: -------------------------------------------')
+    # for op in output:
+    #     print(op, '\n')
+    # print('-------------------------Output ends: -------------------------------------------')
+
+    # end_time = time.time()
+    # print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
+
+    # Prompt example 2
     start_time = time.time()
-    prompt = '''
-    Given 4 input numbers labeled A, B, C, D: labeled as \"Input: A B C D\".
-    Select two numbers and an arithmetic operator from the list of operators (+, -, *, /) to form a valid expression. The expression should evaluate to the third number R.
-    For example if A and B are chosen as the operand and * is the operator, it will generate a line: \"A * B = R (left: R C D)\", where C and D are the remaining unused/ left out numbers. 
-    Repeat selection and evaluation of expression and output format, and list it as output 
-    Here is an example in double quotes:
-    \"Input: 2 8 8 14
-    Possible next steps:
-    2 + 8 = 10 (left: 10 8 14)
-    8 / 2 = 4 (left: 4 8 14)
-    14 + 2 = 16 (left: 16 8 8)
-    2 * 8 = 16 (left: 16 8 14)
-    8 - 2 = 6 (left: 6 8 14)
-    14 - 8 = 6 (left: 6 2 8)
-    14 /  2 = 7 (left: 7 8 8)
-    14 - 2 = 12 (left: 12 8 8)\"
-    Given the example above, continue the output after the double quotes. 
-    \"Input: 4 5 6 10
-    \"Possible next steps\":\"
+    prompt = '''\nWrite a coherent passage of 4 short paragraphs. The end sentence of each paragraph must be: It isn't difficult to do a handstand if you just stand on your hands. It caught him off guard that space smelled of seared steak. When she didn’t like a guy who was trying to pick her up, she started using sign language. Each person who knows you has a different perception of who you are.\n\n\nMake a plan then write. Your output should be of the following format:\n\nPlan:\nYour plan here.\n\nPassage:\nYour passage here.\n
     '''
-    print(f'Prompt: {prompt}')
+    print(f'Prompt: {prompt}') 
     output = llm.llama(prompt, max_tokens = 200)
 
     print('-------------------------Output starts: -------------------------------------------')
@@ -96,102 +111,18 @@ if __name__ == '__main__':
     end_time = time.time()
     print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
 
-    # Prompt example 2
+    # Prompt example 3
     start_time = time.time()
     prompt = '''
-    Given this example, generate its "Possible next steps" below:
-    Input: 2 8 8 14
-    Possible next steps:
-    2 + 8 = 10 (left: 8 10 14)
-    8 / 2 = 4 (left: 4 8 14)
-    14 + 2 = 16 (left: 8 8 16)
-    2 * 8 = 16 (left: 8 14 16)
-    8 - 2 = 6 (left: 6 8 14)
-    14 - 8 = 6 (left: 2 6 8)
-    14 /  2 = 7 (left: 7 8 8)
-    14 - 2 = 12 (left: 8 8 12)
-    Input: 4 5 6 10
-    Possible next steps:
+    Given an instruction and several choices, decide which choice is most promising. Analyze each choice in detail, then conclude in the last line "The best choice is {s}", where s the integer id of the choice.
+    \nChoice 1:\n*/\nChoice 2:\nIt isn\'t difficult to do a handstand if you just stand on your hands.\n\nIt caught him off guard that space smelled of seared steak.\n\nWhen she didn’t like a guy who 
+    was trying to pick her up, she started using sign language.\n\nEach person who knows you has a different perception of who you are.\nChoice 3:\nIt isn\'t difficult to do a handstand if you just stand on
+    your hands.\n\nIt caught him off guard that space smelled of seared steak.\n\nWhen she didn’t like a guy who was trying to pick her up, she started using sign language.\n\nEach person who knows you has
+    a different perception of who you are.\nChoice 4:\nIt isn\'t difficult to do a handstand if you just stand on your hands.\n\nIt caught him off guard that space smelled of seared steak.\n\nWhen she 
+    didn’t like a guy who was trying to pick her up, she started using sign language.\n\nEach person who knows you has a different perception of who you are.\n\n*/\nChoice 5:\n\n
     '''
-    print(f'Prompt: {prompt}')
-    output = llm.llama(prompt, max_tokens = 200, do_sample = False, beams= 1, n = 1)
-
-    print('------------------------- Output starts: -------------------------------------------')
-    for op in output:
-        print(op, '\n')
-    print('-------------------------Output ends: -------------------------------------------')
-    end_time = time.time()
-
-    print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
-
-    # # Prompt example 3
-    # start_time = time.time()
-    # prompt = 'If there is a robbery in the park, and Bob is one of two men in the park? What is the probability that Bob committed the robbery?'
-    # print(f'Prompt: {prompt}')
-    # output = llm.llama(prompt, max_tokens = 200, do_sample = False, beams= 2, n = 2)
-    # end_time = time.time()
-    # print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
-
-
-    # Prompt example 4
-    start_time = time.time()
-    prompt = '''Evaluate if given numbers can reach 24 (sure/likely/impossible)
-    10 14
-    10 + 14 = 24
-    sure
-    11 12
-    11 + 12 = 23
-    12 - 11 = 1
-    11 * 12 = 132
-    11 / 12 = 0.91
-    impossible
-    4 4 10
-    4 + 4 + 10 = 8 + 10 = 18
-    4 * 10 - 4 = 40 - 4 = 36
-    (10 - 4) * 4 = 6 * 4 = 24
-    sure
-    4 9 11
-    9 + 11 + 4 = 20 + 4 = 24
-    sure
-    5 7 8
-    5 + 7 + 8 = 12 + 8 = 20
-    (8 - 5) * 7 = 3 * 7 = 21
-    I cannot obtain 24 now, but numbers are within a reasonable range
-    likely
-    5 6 6
-    5 + 6 + 6 = 17
-    (6 - 5) * 6 = 1 * 6 = 6
-    I cannot obtain 24 now, but numbers are within a reasonable range
-    likely
-    10 10 11
-    10 + 10 + 11 = 31
-    (11 - 10) * 10 = 10
-    10 10 10 are all too big
-    impossible
-    1 3 3
-    1 * 3 * 3 = 9
-    (1 + 3) * 3 = 12
-    1 3 3 are all too small
-    impossible
-    9 10 10 
-    '''
-    print(f'Prompt: {prompt}')
-    output = llm.llama(prompt, max_tokens = 200, do_sample = False, beams= 3, n = 3)
-
-    print('-------------------------Output starts: -------------------------------------------')
-    for op in output:
-        print(op, '\n')
-    print('-------------------------Output ends: -------------------------------------------')
-
-    end_time = time.time()
-    print(f'\n- Output: {output}\n- Total time (s): {end_time - start_time} \n---------------------------')
-
-
-
-
-    start_time = time.time()
-    print(f'Prompt: {prompt}')
-    output = llm.llama(prompt, max_tokens = 200, do_sample = True, beams= 3, n = 3, temperature = 5.0, top_k = 100, top_p = 0.9)
+    print(f'Prompt: {prompt}') 
+    output = llm.llama(prompt, max_tokens = 200)
 
     print('-------------------------Output starts: -------------------------------------------')
     for op in output:

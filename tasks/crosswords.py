@@ -4,7 +4,7 @@ import os
 from tasks.base import Task, DATA_PATH
 from prompts.crosswords import * 
 from models import gpt
-from model_llama import llama
+import globals
 
 class MiniCrosswordsEnv:
     def __init__(self, file='mini0505.json'):
@@ -20,6 +20,7 @@ class MiniCrosswordsEnv:
         return self.n
     
     def reset(self, idx, board=None, status=None, steps=None):
+        # breakpoint()
         self.idx = idx
         self.data, self.board_gt = self.file[idx]
         self.board = ['_'] * 25
@@ -38,6 +39,7 @@ class MiniCrosswordsEnv:
     
 
     def prompt_status(self):
+        # breakpoint()
         count = {'sure': 0, 'maybe': 0, 'impossible': 0}
         for ans, data, status in zip(self.ans, self.data, self.status):
             # if status != 0: continue
@@ -51,7 +53,7 @@ class MiniCrosswordsEnv:
                 # res = gpt(prompt)[0]
 
                 # Replace with llama
-                res = llama(prompt, model = 'llama-7B', max_tokens = 10)[0]
+                res = globals.LLM.llama(prompt, max_tokens = 100, do_sample = False)
 
                 self.prompt_status_cache[prompt] = res
             # print(line)
@@ -75,6 +77,7 @@ class MiniCrosswordsEnv:
         return s
 
     def render_clues(self, status=None):
+        # breakpoint()
         s = ""
         # s += "Horizontal:\n"
         for i in range(5):
@@ -87,6 +90,7 @@ class MiniCrosswordsEnv:
         return s
     
     def render_ans(self, status=None):
+        # breakpoint()
         s = ""
         # s += "Horizontal:\n"
         for i in range(5):
@@ -99,6 +103,7 @@ class MiniCrosswordsEnv:
         return s
     
     def render_gt_ans(self, status=None):
+        # breakpoint()
         s = ""
         # s += "Horizontal:\n"
         for i in range(5):
@@ -117,6 +122,7 @@ class MiniCrosswordsEnv:
             return self.render_board() + '\n' + self.render_ans()
     
     def get_ans(self, board):
+        # breakpoint()
         ans = [''] * 10
         for i in range(5):
             ans[i] = ''.join(board[i*5:(i+1)*5])
@@ -125,6 +131,7 @@ class MiniCrosswordsEnv:
         return ans
     
     def step(self, action):
+        # breakpoint()
         self.steps += 1
         action = action.split('\n')[-1]
         action = action.split('. ')
@@ -180,6 +187,7 @@ class MiniCrosswordsTask(Task):
         return len(self.env)
     
     def get_input(self, idx: int) -> str:
+        # breakpoint()
         self.env.reset(idx)
         return self.env.render_clues()
     
@@ -192,6 +200,7 @@ class MiniCrosswordsTask(Task):
     #     return info['r_word']
     
     def test_output(self, idx: int, output: str):
+        # breakpoint()
         self.env.reset(idx)
         output = output.split('Output:\n')[-1]
         info = {'r_word': 0, 'r_letter': 0, 'r_game': 0}
@@ -202,10 +211,19 @@ class MiniCrosswordsTask(Task):
             action = f'h{i}. {word}'
             # print(action)
             _, _, _, info = self.env.step(action)
+
+        # TODO: debug - something from self.env.step(action) overwrites info, which is an empty dict. Hence why the subsequent code fails.
+        print("####################################################")
+        print(info) 
+        print(type(info))
+
         info['r'] = info['r_word']
+        # info.update({'r': info['r_word']})
+
         return info
 
     def set_status(self, x: str, y: str):
+        # breakpoint()
         idx = self.xs.index(x)
         self.test_output(idx, y)  # update self.env
     
@@ -222,6 +240,7 @@ class MiniCrosswordsTask(Task):
         return propose_prompt.format(input=self.env.render())
     
     def propose_outputs_unwrap(self, x: str, y: str, outputs: list, n_max_propose: int) -> list:
+        # breakpoint()
         confidence_to_value = {'certain': 1, 'high': 0.5, 'medium': 0.2, 'low': 0.1}  # TODO: ad hoc
         proposals_to_scores = {}
         for output in outputs:
@@ -243,6 +262,7 @@ class MiniCrosswordsTask(Task):
         return proposals
     
     def evaluate(self, x: str, y: str, n_evaluate_sample: int) -> int:
+        # breakpoint()
         self.set_status(x, y)
         assert n_evaluate_sample == 1 # TODO: ad hoc
         count = {'sure': 0, 'maybe': 0, 'impossible': 0}
@@ -254,7 +274,7 @@ class MiniCrosswordsTask(Task):
             # res = gpt(prompt)[0]
 
             # Replaced with llama
-            res = llama(prompt, model = 'llama-7B', max_tokens = 10)[0]
+            res = globals.LLM.llama(value_prompt, max_tokens = 100, do_sample = False)[0]
 
             print(line)
             print(res)
