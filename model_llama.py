@@ -3,15 +3,10 @@ import time
 import torch
 import re
 sys.path.insert(0, '/hdd4/zoo/llama/7B')
-sys.path.insert(0, '/hdd4/zoo/llama/13B')
-sys.path.insert(0, '/hdd4/zoo/llama/30B')
-sys.path.insert(0, '/hdd4/zoo/llama/65B')
-
 from prompts.text import *
 from transformers import LlamaForCausalLM, LlamaTokenizer
 from accelerate import load_checkpoint_and_dispatch
 from optimum.bettertransformer import BetterTransformer
-
 
 class LLM: 
     def __init__(self, model_name = 'llama-7B'):

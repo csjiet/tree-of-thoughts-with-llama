@@ -131,7 +131,7 @@ class MiniCrosswordsEnv:
         return ans
     
     def step(self, action):
-        # breakpoint()
+        breakpoint()
         self.steps += 1
         action = action.split('\n')[-1]
         action = action.split('. ')
